@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import GoogleLoginButton from './GoogleLoginButton';
 import '../styles/Login.css'
 
 function Login() {
   const [isRightPanelActive, setRightPanelActive] = useState(false);
+  const navigate = useNavigate();
 
   function handleLeftPanel() {
     setRightPanelActive(false);
@@ -19,6 +21,7 @@ function Login() {
   }
   function handleLogIn() {
     alert('Login successful');
+    navigate('/dashboard')
   }
   function handleSignUp() {
     alert('signup succesful');
@@ -62,13 +65,13 @@ function Login() {
           <div className='overlay-panel overlay-left'>
             <h1>Login</h1>
             <p>Login here if you already have an account</p>
-            <button className='ghost mt-5' id='signIn' onClick={handleLeftPanel}>Login</button>
+            <button className='ghost mt-5' id='signIn' onClick={handleLeftPanel}>Log In</button>
           </div>
 
           <div className='overlay-panel overlay-right'>
             <h1>Create account</h1>
             <p>Signup here if you do not have an account</p>
-            <button className='ghost' id='signUp' onClick={handleRightPanel}>Signup</button>
+            <button className='ghost' id='signUp' onClick={handleRightPanel}>Sign Up</button>
           </div>
 
         </div>
