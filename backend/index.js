@@ -5,7 +5,7 @@ const pool = require('./dbConfig')
 const app = express();
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
@@ -25,6 +25,57 @@ pool.query('SELECT NOW()', (err, res) => {
     } else {
       console.log('Connected to the database :)');
     }
+});
+
+app.post('/signup', (request, response) => {
+    const { name, username, password, userRole } = request.body;
+
+    if(!name || !username || !password) {
+        return response.send({ message: "Could not read empty", error: true });
+    }
+    pool.query('select * from users where username = $1',[username], (err,result) => {
+        if (err) {
+            response.send({ message: "Something went wrong", error: true });
+        } else if (result.rowCount) {
+            response.send({ message: "Use different username", error: true });
+        } else {
+            pool.query('insert into users (name, username, password, userrole) values ($1, $2, $3, $4)', [name, username, password, userRole], (err2, result2) => {
+                if (err2) {
+                    response.send({ message: "Error Adding User", error: true});
+                } else {
+                    response.status(201).send({ message: "User added successfully", error: false});
+                }
+            });
+        }
+    });
+});
+
+app.post('/login', (request, response) => {
+    const { username, password } = request.body;
+
+    pool.query('select * from users where username = $1 and password = $2',[username, password], (err, result) => {
+        if (err) {
+            response.send({message: "Something went wrong", name: undefined, error: true});
+        } else if (result.rowCount) {
+            const date = new Date();
+            const token = Buffer.from(date.toISOString()+username).toString('base64');
+            pool.query('update users set token = $1 where username = $1 and password = $2', [token, username], (err2, result2) => {
+                if (err2) {
+                    response.send({ message: "Could not log you in", name: undefined, error: true});
+                } else {
+                    var fullName = result.rows[0].name;
+                    var name = fullName;
+                    const spaceIndex = fullName.indexOf(' ');
+                    if (spaceIndex !== -1) {
+                        name = fullName.substring(0, spaceIndex);
+                    }
+                    response.send({message: "Login Success", name, error: false});
+                }
+            });
+        } else {
+            response.send({message: "Invalid Credentials", name: undefined, error: true});
+        }
+    });
 });
 
 app.listen(8080, () => {
