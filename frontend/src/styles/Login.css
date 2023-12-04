@@ -79,9 +79,8 @@ a {
 }
 
 .form-container input:focus {
-    background-color: #eee;
-    border-color: #00855d;
-    box-shadow: 0 0 0 3px #c8fadc, 0 1px 2px rgba(21, 57, 31, 0.15) inset;
+    outline: none;
+    box-shadow: 0 0 0 1px #65a0d0, 0 5px 5px rgba(0, 0, 0, 0.15) inset;
 }
 
 .custom-dropdown {
@@ -96,9 +95,9 @@ a {
 }
 
 .custom-dropdown:focus {
-    background-color: #eee;
-    border-color: #00855d;
-    box-shadow: 0 0 0 3px #c8fae7, 0 1px 2px rgba(15, 17, 17, .15) inset;
+    outline: none;
+    transform: scale(1.02);
+    box-shadow: 0 0 0 1px #aae7ff, 0 1px 2px rgba(0, 0, 0, 0.15) inset;
 }
 
 .form-container input:hover {
@@ -124,11 +123,16 @@ button:active {
 }
 
 button:focus {
-    outline: none;
+    transform: scale(1.03);
+    background: #0180bb;
+    border-color: #00857c;
+    box-shadow: 0 0 0 3px #c1e2ea, 0 1px 2px rgba(0, 0, 0, 0.15) inset;
 }
 
 button:hover {
     cursor: pointer;
+    transform: scale(1.03);
+    background: #0180bb;
 }
 
 button.ghost {
