@@ -21,12 +21,74 @@ function Login() {
     setRightPanelActive(!isRightPanelActive);
   }
 
-  function handleGoogleLogInSuccess() {
-    alert('pass');
+  async function handleGoogleLogInSuccess(googleResponse) {
+    try {
+      const data = {
+        token: googleResponse.credential,
+        client_id: googleResponse.client_id
+      }
+      const response = await axios.post('http://localhost:8080/googlelogin', data);
+      if (response.data.emailVerified === true) {
+        const userData = {
+          "username": response.data.username,
+          "password": response.data.username
+        }
+        try {
+          const loginResponse = await axios.post('http://localhost:8080/login', userData);
+          if (loginResponse.data.error === false) {
+            await swal("Login Successful", "You will be redirected to Login", "success");
+            localStorage.setItem('name', loginResponse.data.name);
+            localStorage.setItem('token', loginResponse.data.token);
+            navigate('/dashboard');
+          } else {
+            await swal("Login Failed", "Invalid Credentials", "error");
+          }
+        } catch(error) {
+          console.error(error);
+        }
+      } else {
+        await swal("Login Error", "Verify your google email", "warning");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function handleGoogleLogInError() {
     alert('error');
+  }
+
+  async function handleGoogleSignUpSuccess(googleResponse) {
+    try {
+      const data = {
+        token: googleResponse.credential,
+        client_id: googleResponse.client_id
+      }
+      const response = await axios.post('http://localhost:8080/googlelogin', data);
+      if (response.data.emailVerified === true) {
+        const userData = {
+          "name": response.data.name,
+          "username": response.data.username,
+          "password": response.data.username,
+          "userRole": userRole.trim() ? userRole : 'Client'
+        }
+        try {
+          const signupResponse = await axios.post('http://localhost:8080/signup', userData);
+          if (signupResponse.data.error === false) {
+            await swal("Signup Successful", "You will be redirected to Login", "success");
+            window.location.reload();
+          } else {
+            await swal("Signup Failed", signupResponse.data.message, "error");
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        await swal("Signup Error", "Verify your google email", "warning");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async function handleLogIn(e) {
@@ -50,8 +112,6 @@ function Login() {
     } catch (error) {
       console.error(error);
     }
-
-    navigate('/dashboard');
   }
 
   async function handleSignUp(e) {
@@ -88,7 +148,7 @@ function Login() {
 
           <div className="social-container">
             <a href="/google" target="_blank" className="social">
-              <GoogleLoginButton onSuccess={handleGoogleLogInSuccess} onError={handleGoogleLogInError}/>
+              <GoogleLoginButton onSuccess={handleGoogleSignUpSuccess} onError={handleGoogleLogInError} />
             </a>
           </div>
 
