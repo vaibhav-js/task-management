@@ -78,7 +78,7 @@ app.post('/login', (request, response) => {
         } else if (result.rowCount) {
             const date = new Date();
             const token = Buffer.from(date.toISOString()+username).toString('base64');
-            pool.query('update users set token = $1 where username = $1 and password = $2', [token, username], (err2, result2) => {
+            pool.query('update users set token = $1 where username = $2', [token, username], (err2, result2) => {
                 if (err2) {
                     response.send({ message: "Could not log you in", name: undefined, error: true});
                 } else {
@@ -88,7 +88,7 @@ app.post('/login', (request, response) => {
                     if (spaceIndex !== -1) {
                         name = fullName.substring(0, spaceIndex);
                     }
-                    response.send({message: "Login Success", name, error: false});
+                    response.send({message: "Login Success", name, error: false, token, role: result.rows[0].userrole});
                 }
             });
         } else {
@@ -97,6 +97,45 @@ app.post('/login', (request, response) => {
     });
 });
 
+app.post('/service', (request, response) => {
+    const { service, token } = request.body;
+    pool.query('select * from users where token = $1', [token], (err, result) => {
+        if (err) {
+            response.send({message: "Something went wrong", error: true});
+            console.error(err);
+        } else if (result.rowCount) {
+            const id = result.rows[0].id;
+            pool.query('insert into providers(userid, service) values ($1, $2)', [id, service], (err2, result2) => {
+                if (err2) {
+                    response.send({message: "Something went wrong", error: true});
+                    console.error(err2);
+                } else {
+                    response.send({message: "Successful", error: false});
+                }
+            });
+        }
+    });
+});
+
+app.get('/providers', (request, response) => {
+    const service = request.query.service.toLowerCase();
+    pool.query('select * from providers where service = $1', [service], (err, result) => {
+        if (err) {
+            response.send(err);
+        } else if (result.rowCount) {
+            const alluserids = result.rows.map(row => row.userid);
+            const userIdList = alluserids.join(',');
+            pool.query(`select * from users where id IN (${userIdList})`, (err2, result2) => {
+                if (err2) {
+                    response.send(err2);
+                } else {
+                    response.send(result2.rows);
+                }
+            });
+        }
+    });
+});
+
 app.listen(8080, () => {
     console.log('server running on port 8080')
-})
+});
