@@ -117,6 +117,18 @@ app.post('/service', (request, response) => {
     });
 });
 
+app.get('/service', (request, response) => {
+    pool.query('select distinct(service) from providers', (err, result) => {
+        if (err) {
+            response.send({ message: "Something went wrong getting details", error: true });
+        } else if (result.rowCount) {
+            response.send({ message: "Successful", error: false, list: result.rows });
+        } else {
+            response.send({message: "No services", error: false });
+        }
+    })
+})
+
 app.get('/providers', (request, response) => {
     const service = request.query.service.toLowerCase();
     pool.query('select * from providers where service = $1', [service], (err, result) => {
