@@ -1,9 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import axios from 'axios';
 
 function Client() {
     const [option, setOption] = useState('Mehendi');
     const [providerArray, setProviderArray] = useState([]);
+    const [servicesList, setServicesList] = useState([]);
+
+    useEffect(() => {
+      getServices();
+    }, [])
+
+    async function getServices() {
+      try {
+        const response = await axios.get("http://localhost:8080/service");
+        setServicesList(response.data.list);
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     function handleLogout() {
         localStorage.removeItem('token');
@@ -31,11 +49,25 @@ function Client() {
         <h2>Hi { localStorage.getItem('name') } </h2>
         <h3>Provider List</h3>
         <h4>Groups</h4>
-        <select name='group' id='group' onChange={(e) => setOption(e.target.value)}>
-          <option value="Mehendi">Mehendi</option>
-          <option value="DJ">DJ</option>
-          <option value="Catering">Catering</option>
-        </select>
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+          <InputLabel id="demo-select-small-label">Services</InputLabel>
+          <Select
+            labelId="demo-select-small-label"
+            id="demo-select-small"
+            value={option}
+            label="Services"
+            onChange={(e) => setOption(e.target.value)}
+          >
+            {
+              (Array.isArray(servicesList) && servicesList.length > 0) ? (servicesList.map(item => (
+                <MenuItem value={item.service} key={item.service}>{item.service.toUpperCase()}</MenuItem>
+              ))) : 
+                <MenuItem value={''}>No services</MenuItem>
+            }
+          </Select>
+          <br></br>
+          <button onClick={handle}>Show results</button>&nbsp;&nbsp;
+        </FormControl>
         <table>
           <tbody>
             {
@@ -54,7 +86,6 @@ function Client() {
             }
           </tbody>
         </table>
-        <button onClick={handle}>Submit</button>
         <button onClick={handleLogout}>Log Out</button>
       </div>
   );
