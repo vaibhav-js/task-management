@@ -1,14 +1,14 @@
 import React from 'react'
+import Client from './Client';
+import Provider from './Provider';
 
 function Dashboard() {
-  function handleLogout() {
-    localStorage.removeItem('token');
-    window.location.reload();
-  }
+  const role = localStorage.getItem('role');
   return (
     <div>
-        <h1>Welcome to Dashboard</h1>
-        <button onClick={handleLogout}>Log Out</button>
+      {
+        role === 'Client' ? <Client /> : <Provider />
+      }
     </div>
   )
 }
