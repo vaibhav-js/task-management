@@ -13,7 +13,7 @@ function Login() {
   const [usernameLogin, setUsernameLogin] = useState('');
   const [passwordSignup, setpasswordSignup] = useState('');
   const [passwordLogin, setpasswordLogin] = useState('');
-  const [userRole, setUserRole] = useState('');
+  const [userRole, setUserRole] = useState('Client');
   const [disableButton, setDisableButton] = useState(false);
   const navigate = useNavigate();
 
@@ -39,6 +39,7 @@ function Login() {
             await swal("Login Successful", "You will be redirected to Login", "success");
             localStorage.setItem('name', loginResponse.data.name);
             localStorage.setItem('token', loginResponse.data.token);
+            localStorage.setItem('role', loginResponse.data.role);
             navigate('/dashboard');
           } else {
             await swal("Login Failed", "Invalid Credentials", "error");
@@ -70,7 +71,7 @@ function Login() {
           "name": response.data.name,
           "username": response.data.username,
           "password": response.data.username,
-          "userRole": userRole.trim() ? userRole : 'Client'
+          "userRole": userRole.trim()
         }
         try {
           const signupResponse = await axios.post('http://localhost:8080/signup', userData);
@@ -147,9 +148,7 @@ function Login() {
           <h1>Create Account</h1>
 
           <div className="social-container">
-            <a href="/google" target="_blank" className="social">
-              <GoogleLoginButton onSuccess={handleGoogleSignUpSuccess} onError={handleGoogleLogInError} />
-            </a>
+            <GoogleLoginButton onSuccess={handleGoogleSignUpSuccess} onError={handleGoogleLogInError} />
           </div>
 
           <span>Or use your Email for registration</span>
@@ -202,9 +201,7 @@ function Login() {
           <h1>Login</h1>
 
           <div className="social-container">
-            <a href="/google" target="_blank" className="social">
-              <GoogleLoginButton onSuccess={handleGoogleLogInSuccess} onError={handleGoogleLogInError}/>
-            </a>
+            <GoogleLoginButton onSuccess={handleGoogleLogInSuccess} onError={handleGoogleLogInError}/>
           </div>
 
           <span>Or sign in using your username</span>
