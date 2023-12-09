@@ -117,7 +117,28 @@ app.post('/service', (request, response) => {
     });
 });
 
-app.get('/service', (request, response) => {
+app.post('/ticket', (request, response) => {
+    const {service, token, assigneeid, assigneename, reportername} = request.body;
+    pool.query('select * from users where token = $1', [token], (err, result) => {
+        if (err) {
+            console.error(err);
+            response.send({message: "User not found", error: true});
+        } else if (result.rowCount) {
+            const reporterid = result.rows[0].id;
+            const date = (new Date()).toISOString();
+            pool.query('insert into ticket(reporterid, reportername, assigneeid, assigneename, description, createdat) values($1, $2, $3, $4, $5, $6)', [reporterid, reportername, assigneeid, assigneename, service, date], (err2, result2) => {
+                if (err2) {
+                    console.error(err2)
+                    response.send({message: "Could not create ticket", error: true});
+                } else {
+                    response.send({message: "Ticket details submitted", error: false});
+                }
+            });
+        }
+    });
+});
+
+app.get('/services', (request, response) => {
     pool.query('select distinct(service) from providers', (err, result) => {
         if (err) {
             response.send({ message: "Something went wrong getting details", error: true });
@@ -126,8 +147,8 @@ app.get('/service', (request, response) => {
         } else {
             response.send({message: "No services", error: false });
         }
-    })
-})
+    });
+});
 
 app.get('/providers', (request, response) => {
     const service = request.query.service.toLowerCase();
@@ -147,6 +168,46 @@ app.get('/providers', (request, response) => {
         }
     });
 });
+
+app.get('/tickets', (request, response) => {
+    const { token } = request.query;
+    pool.query('select id from users where token = $1', [token], (err, result) => {
+        if (err) {
+            console.error(err);
+            response.send({ message: "User not authorised", error: true });
+        } else if (result.rowCount) {
+            const reporterid = result.rows[0].id;
+            pool.query('select * from ticket where reporterid = $1', [reporterid], (err2, result2) => {
+                if (err2) {
+                    console.error(err2);
+                    response.send({ message: "Could not retreive tickets details", error: true });
+                } else {
+                    response.send({ message: "Successful", error: false, list: result2.rows });
+                }
+            });
+        }
+    });
+});
+
+app.delete('/tickets', (request, response) => {
+    const { token } = request.query;
+    pool.query('select id from users where token = $1', [token], (err, result) => {
+        if (err) {
+            console.error(err);
+            response.send({message: "user not authorised", error: true});
+        } else if (result.rowCount) {
+            const reporterid = result.rows[0].id;
+            pool.query('delete from ticket where reporterid = $1', [reporterid], (err2, result2) => {
+                if (err2) {
+                    console.error(err2);
+                    response.send({message: "Could not delete all tickets", error: true});
+                } else {
+                    response.send({message: "Tickets deleted successfully", error: false});
+                }
+            })
+        }
+    })
+})
 
 app.listen(8080, () => {
     console.log('server running on port 8080')
