@@ -222,7 +222,7 @@ app.delete('/tickets', (request, response) => {
 })
 
 app.post('/logout', (request, response) => {
-    const { token } = request.query;
+    const { token } = request.body;
     pool.query('update users set token = $1 where id = (select id from users where token = $2)', ['', token], (err, result) => {
         if (err) {
             response.send({ message: "Authorization failed", error: true });
