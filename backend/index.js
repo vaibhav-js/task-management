@@ -179,7 +179,7 @@ app.get('/tickets', (request, response) => {
             const searchid = result.rows[0].id;
             const userrole = result.rows[0].userrole;
             if (userrole === 'Client') {
-                pool.query('select * from ticket where reporterid = $1', [searchid], (err2, result2) => {
+                pool.query('select id, assigneename, description, createdat from ticket where reporterid = $1', [searchid], (err2, result2) => {
                     if (err2) {
                         console.error(err2);
                         response.send({ message: "Could not retreive tickets details", error: true });
@@ -188,7 +188,7 @@ app.get('/tickets', (request, response) => {
                     }
                 });
             } else {
-                pool.query('select * from ticket where assigneeid = $1', [searchid], (err2, result2) => {
+                pool.query('select id, reportername, description, createdat from ticket where assigneeid = $1', [searchid], (err2, result2) => {
                     if (err2) {
                         console.error(err2);
                         response.send({ message: "Could not retreive tickets details", error: true });
