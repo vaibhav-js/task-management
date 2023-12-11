@@ -7,7 +7,7 @@ function Dashboard() {
   return (
     <div>
       {
-        role === 'Client' ? <Client /> : <Provider />
+        role === 'Client' ? <Client /> : (role === 'Provider') ? <Provider /> : <></>
       }
     </div>
   )
