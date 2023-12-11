@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 
-const columns = [
+let columns = [
   { field: 'id', headerName: 'ID', width: 90 },
   {
     field: 'reportername',
@@ -17,7 +17,7 @@ const columns = [
   },
   {
     field: 'description',
-    headerName: 'Service',
+    headerName: 'Description',
     width: 150,
   },
   {
@@ -33,6 +33,12 @@ export default function DataGridDemo() {
     React.useEffect(() => {
         getTickets();
     }, []);
+
+    if (localStorage.getItem('role') === 'Client') {
+        columns = columns.filter((col) => col.field !== 'reportername')
+    } else {
+        columns = columns.filter((col) => col.field !== 'assigneename')
+    }
 
     async function getTickets() {
         try {
