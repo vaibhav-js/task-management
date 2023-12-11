@@ -105,6 +105,7 @@ function Login() {
         await swal("Login Success", "Directing to dashboard..", "success");
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('name', response.data.name);
+        localStorage.setItem('role', response.data.role);
         navigate('/dashboard');
       } else {
         await swal("Login Failed", response.data.message, "error");
@@ -122,7 +123,7 @@ function Login() {
       "name": nameSignup.trim(),
       "username": usernameSignup.trim(),
       "password": passwordSignup.trim(),
-      "userRole": userRole.trim() ? userRole : 'Client'
+      "userRole": userRole.trim()
     }
 
     try {
