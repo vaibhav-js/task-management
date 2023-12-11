@@ -171,15 +171,13 @@ app.get('/providers', (request, response) => {
 
 app.get('/tickets', (request, response) => {
     const { token } = request.query;
-    pool.query('select (id, userrole) from users where token = $1', [token], (err, result) => {
+    pool.query('select id, userrole from users where token = $1', [token], (err, result) => {
         if (err) {
             console.error(err);
             response.send({ message: "User not authorised", error: true });
         } else if (result.rowCount) {
-            const resultString = result.rows[0].row
-            const commaIndex = resultString.indexOf(',');
-            const searchid = resultString.substring(1, commaIndex);
-            const userrole = resultString.substring(commaIndex+1, resultString.length - 1);
+            const searchid = result.rows[0].id;
+            const userrole = result.rows[0].userrole;
             if (userrole === 'Client') {
                 pool.query('select * from ticket where reporterid = $1', [searchid], (err2, result2) => {
                     if (err2) {
@@ -219,6 +217,17 @@ app.delete('/tickets', (request, response) => {
                     response.send({message: "Tickets deleted successfully", error: false});
                 }
             })
+        }
+    })
+})
+
+app.post('/logout', (request, response) => {
+    const { token } = request.query;
+    pool.query('update users set token = $1 where id = (select id from users where token = $2)', ['', token], (err, result) => {
+        if (err) {
+            response.send({ message: "Authorization failed", error: true });
+        } else {
+            response.send({ message: "Logout successful", error: false});
         }
     })
 })
