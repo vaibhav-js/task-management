@@ -10,8 +10,12 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import axios from 'axios';
 import swal from 'sweetalert'
+import dayjs from 'dayjs';
 
 
 function TicketForm() {
@@ -21,6 +25,9 @@ function TicketForm() {
   const [providerArray, setProviderArray] = React.useState([]);
   const [provider, setProvider] = React.useState();
   const [providerId, setProviderId] = React.useState();
+
+  const currentDate = new Date();
+  const [selectedDate, setSelectedDate] = React.useState(dayjs(currentDate));
 
   React.useEffect(() => {
     getServices();
@@ -44,6 +51,7 @@ function TicketForm() {
         const response = await axios.get('http://localhost:8080/providers', {params: data});
         setProviderArray(response.data);
         console.log(response.data);
+        console.log(selectedDate);
       } catch (error) {
         console.error(error);
       }
@@ -67,7 +75,7 @@ function TicketForm() {
         "token": localStorage.getItem('token'),
         "assigneeid": providerId,
         "assigneename": provider,
-        "reportername": localStorage.getItem('name')
+        "reportername": localStorage.getItem('name'),
     }
     const response = await axios.post('http://localhost:8080/ticket', data);
     if (response.data.error === false) {
@@ -115,7 +123,7 @@ function TicketForm() {
                         </Select>
                     </FormControl>
 
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    <FormControl sx={{ m: 1, minWidth: 200 }}>
                         <InputLabel id="demo-dialog-select-label">Providers</InputLabel>
                         <Select
                             labelId="demo-dialog-select-label"
@@ -145,6 +153,11 @@ function TicketForm() {
                                 )
                             }
                         </Select>
+                        <Box>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>                    
+                                <DateCalendar value={selectedDate} onChange={(newDate) => {setSelectedDate(newDate);console.log(selectedDate.$d);}} />
+                            </LocalizationProvider>
+                        </Box>
                     </FormControl>
                 </Box>
             </DialogContent>
