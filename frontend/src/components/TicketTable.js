@@ -6,13 +6,18 @@ import axios from 'axios';
 const columns = [
   { field: 'id', headerName: 'ID', width: 90 },
   {
+    field: 'reportername',
+    headerName: 'Client',
+    width: 100,
+  },
+  {
     field: 'assigneename',
-    headerName: 'Assignee',
+    headerName: 'Provider',
     width: 100,
   },
   {
     field: 'description',
-    headerName: 'Description',
+    headerName: 'Service',
     width: 150,
   },
   {
@@ -27,15 +32,18 @@ export default function DataGridDemo() {
 
     React.useEffect(() => {
         getTickets();
-    }, [rows]);
+    }, []);
 
     async function getTickets() {
-        const data = {
-            "token": localStorage.getItem('token')
+        try {
+            const data = {
+                "token": localStorage.getItem('token')
+            }
+            const response = await axios.get('http://localhost:8080/tickets', {params: data});
+            setRows(() => [...response.data.list]);
+        } catch (error) {
+            console.error(error);
         }
-        const response = await axios.get('http://localhost:8080/tickets', {params: data});
-        console.log(response.data.list);
-        setRows(response.data.list);
     }
 
     return (
