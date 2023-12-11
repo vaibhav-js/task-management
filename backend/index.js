@@ -171,20 +171,34 @@ app.get('/providers', (request, response) => {
 
 app.get('/tickets', (request, response) => {
     const { token } = request.query;
-    pool.query('select id from users where token = $1', [token], (err, result) => {
+    pool.query('select (id, userrole) from users where token = $1', [token], (err, result) => {
         if (err) {
             console.error(err);
             response.send({ message: "User not authorised", error: true });
         } else if (result.rowCount) {
-            const reporterid = result.rows[0].id;
-            pool.query('select * from ticket where reporterid = $1', [reporterid], (err2, result2) => {
-                if (err2) {
-                    console.error(err2);
-                    response.send({ message: "Could not retreive tickets details", error: true });
-                } else {
-                    response.send({ message: "Successful", error: false, list: result2.rows });
-                }
-            });
+            const resultString = result.rows[0].row
+            const commaIndex = resultString.indexOf(',');
+            const searchid = resultString.substring(1, commaIndex);
+            const userrole = resultString.substring(commaIndex+1, resultString.length - 1);
+            if (userrole === 'Client') {
+                pool.query('select * from ticket where reporterid = $1', [searchid], (err2, result2) => {
+                    if (err2) {
+                        console.error(err2);
+                        response.send({ message: "Could not retreive tickets details", error: true });
+                    } else {
+                        response.send({ message: "Successful", error: false, list: result2.rows });
+                    }
+                });
+            } else {
+                pool.query('select * from ticket where assigneeid = $1', [searchid], (err2, result2) => {
+                    if (err2) {
+                        console.error(err2);
+                        response.send({ message: "Could not retreive tickets details", error: true });
+                    } else {
+                        response.send({ message: "Successful", error: false, list: result2.rows });
+                    }
+                });
+            }
         }
     });
 });
