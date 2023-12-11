@@ -1,5 +1,6 @@
 import React from 'react'
 import Form from './Form';
+import TicketTable from './TicketTable';
 
 function Provider() {
 
@@ -14,6 +15,7 @@ function Provider() {
         <h1>Welcome to Dashboard</h1>
         <h2>Hi { localStorage.getItem('name') } </h2>
         <h3>Client List</h3>
+        <TicketTable />
         <Form />&nbsp;&nbsp;
         <button onClick={handleLogout}>Log Out</button>
     </div>
