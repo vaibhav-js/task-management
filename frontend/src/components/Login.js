@@ -141,12 +141,24 @@ function Login() {
     setDisableButton(false);
   }
   return (
-    <div className={`container ${isRightPanelActive ? 'right-panel-active' : ''}`} id='container'>
+    <div className='login__container'>
+      <div className={`container ${isRightPanelActive ? 'right-panel-active' : ''}`} id='container'>
       <div className='form-container sign-up-container'>
         <form onSubmit={handleSignUp}>
 
 
           <h1>Create Account</h1>
+          <br />
+
+          <div>
+            <label htmlFor='role'>
+              Please change if you are a provider
+              <select name='role' id='role' className='custom-dropdown' onChange={(e) => setUserRole(e.target.value)}>
+                <option value="Client">Client</option>
+                <option value="Provider">Provider</option>
+              </select>
+            </label>
+          </div>
 
           <div className="social-container">
             <GoogleLoginButton onSuccess={handleGoogleSignUpSuccess} onError={handleGoogleLogInError} />
@@ -183,16 +195,6 @@ function Login() {
               required
             />
           </label>
-
-          <div>
-            <label htmlFor='role'>
-              You are a &nbsp;
-              <select name='role' id='role' className='custom-dropdown' onChange={(e) => setUserRole(e.target.value)}>
-                <option value="Client">Client</option>
-                <option value="Provider">Provider</option>
-              </select>
-            </label>
-          </div>
           <button style={{marginTop: "9px"}} disabled={disableButton}>Sign up</button>
         </form>
       </div>
@@ -250,6 +252,7 @@ function Login() {
         </div>
       </div>
 
+    </div>
     </div>
   )
 }
