@@ -3,6 +3,7 @@ import Form from './Form';
 import TicketTable from './TicketTable';
 import axios from 'axios';
 import swal from 'sweetalert';
+import '../styles/Provider.css'
 
 function Provider() {
 
@@ -25,13 +26,17 @@ function Provider() {
     }
   }
   return (
-    <div>
+    <div className='provider'>
         <h1>Welcome to Dashboard</h1>
         <h2>Hi { localStorage.getItem('name') } </h2>
-        <h3>Client List</h3>
-        <TicketTable />
-        <Form />&nbsp;&nbsp;
-        <button onClick={handleLogout}>Log Out</button>
+        <button className='button__logout' onClick={handleLogout}>Log Out</button>
+        <div className='table'>
+          <h3>Client List</h3>
+          <TicketTable />
+        </div>
+        <div className='form'>
+          <Form />
+        </div>
     </div>
   )
 }
