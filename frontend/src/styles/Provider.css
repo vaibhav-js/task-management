@@ -1,0 +1,15 @@
+.provider {
+    width: 100%;
+    background-color: lightgray;
+    display: flex;
+    /* height: 100vh; */
+    flex-direction: column;
+}
+
+.button__logout {
+    width: 10%;
+}
+
+.form {
+    display: flex;
+}
