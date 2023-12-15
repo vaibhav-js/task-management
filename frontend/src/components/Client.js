@@ -3,6 +3,7 @@ import TicketForm from './TicketForm';
 import TicketTable from './TicketTable';
 import swal from 'sweetalert';
 import axios from 'axios';
+import '../styles/Client.css'
 
 function Client() {
   async function handleLogout() {
@@ -25,10 +26,10 @@ function Client() {
   }
 
   return (
-    <div>
+    <div className='client'>
       <h1>Welcome to Dashboard</h1>
       <h2>Hi { localStorage.getItem('name') } </h2>
-      <button onClick={handleLogout}>Log Out</button>
+      <button className='button__logout' onClick={handleLogout}>Log Out</button>
       <TicketTable />
       <br></br>
       <TicketForm />
