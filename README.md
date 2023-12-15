@@ -8,7 +8,7 @@ It is a task management web application for wedding purpose with which a user wi
 
 ## Some Terminologies
 
-Client -- User who needs a service for wedding.
+Client -- User who needs a service for wedding. \
 Provider -- User who will provide the service to the client.
 
 ## How to run this project
