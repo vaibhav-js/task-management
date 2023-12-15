@@ -8,8 +8,17 @@
 
 .button__logout {
     width: 10%;
+    margin: 10px;
+}
+
+.table {
+    margin-top: 40px;
+}
+
+.table h3 {
+    margin-bottom: 10px;
 }
 
 .form {
-    display: flex;
+    margin-top: 10px;
 }
