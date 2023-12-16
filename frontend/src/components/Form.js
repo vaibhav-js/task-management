@@ -7,6 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
+const url = process.env.REACT_APP_SERVICE_URL
 
 function Form() {
     const [open, setOpen] = React.useState(false);
@@ -19,7 +20,7 @@ function Form() {
         }
         console.log(service);
         try {
-            const response = await axios.post('http://localhost:8080/service', data);
+            const response = await axios.post(`${url}/service`, data);
             console.log(response);
         } catch (error) {
             console.error(error);
