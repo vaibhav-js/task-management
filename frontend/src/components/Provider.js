@@ -4,6 +4,7 @@ import TicketTable from './TicketTable';
 import axios from 'axios';
 import swal from 'sweetalert';
 import '../styles/Provider.css'
+const url = process.env.REACT_APP_SERVICE_URL
 
 function Provider() {
 
@@ -12,7 +13,7 @@ function Provider() {
       const data = {
         "token": localStorage.getItem('token')
       }
-      const response = await axios.post('http://localhost:8080/logout', data);
+      const response = await axios.post(`${url}/logout`, data);
       if (response.data.error === false) {
         localStorage.removeItem('token');
         localStorage.removeItem('name');

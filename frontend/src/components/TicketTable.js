@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
+const url = process.env.REACT_APP_SERVICE_URL
 
 let columns = [
   { field: 'id', headerName: 'ID', width: 90 },
@@ -45,7 +46,8 @@ export default function DataGridDemo() {
             const data = {
                 "token": localStorage.getItem('token')
             }
-            const response = await axios.get('http://localhost:8080/tickets', {params: data});
+            const response = await axios.get(`${url}/tickets`, {params: data});
+            console.log(response)
             setRows(() => [...response.data.list]);
         } catch (error) {
             console.error(error);
