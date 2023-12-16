@@ -1,11 +1,10 @@
-/* Login Style */
 * {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
 }
 
-.login__container {
+.login__signup__container {
     font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
@@ -39,7 +38,7 @@ a {
     margin: 15px 0;
 }
 
-.container {
+.login__container {
     background: #fff;
     border-radius: 90px;
     box-shadow: 30px 14px 28px rgba(0, 0, 5, .2), 0 10px 10px rgba(0, 0, 0, .2);
@@ -53,7 +52,7 @@ a {
 }
 
 
-.form-container form {
+.form__container form {
     background: #fff;
     display: flex;
     flex-direction: column;
@@ -64,12 +63,12 @@ a {
     text-align: center;
 }
 
-.social-container {
+.social__container {
     margin: 20px 0;
     display: block;
 }
 
-.form-container input{
+.form__container input{
     background: #eee;
     border: none;
     border-radius: 50px;
@@ -78,12 +77,12 @@ a {
     width: 100%;
 }
 
-.form-container input:focus {
+.form__container input:focus {
     outline: none;
     box-shadow: 0 0 0 1px #65a0d0, 0 5px 5px rgba(0, 0, 0, 0.15) inset;
 }
 
-.custom-dropdown {
+.custom__dropdown {
     width: 100%;
     padding: 10px;
     font-size: 14px;
@@ -94,17 +93,17 @@ a {
     outline: none;
 }
 
-.custom-dropdown:focus {
+.custom__dropdown:focus {
     outline: none;
     transform: scale(1.02);
     box-shadow: 0 0 0 1px #aae7ff, 0 1px 2px rgba(0, 0, 0, 0.15) inset;
 }
 
-.form-container input:hover {
+.form__container input:hover {
     transform: scale(101%);
 }
 
-button {
+.login__signup__button {
     border-radius: 50px;
     box-shadow: 0 1px 1px ;
     border: 1px solid #008ecf;
@@ -118,49 +117,49 @@ button {
     transition: transform 80ms ease-in;
 }
 
-button:active {
+.login__signup__button:active {
     transform: scale(.95);
 }
 
-button:focus {
+.login__signup__button:focus {
     transform: scale(1.03);
     background: #0180bb;
     border-color: #00857c;
     box-shadow: 0 0 0 3px #c1e2ea, 0 1px 2px rgba(0, 0, 0, 0.15) inset;
 }
 
-button:hover {
+.login__signup__button:hover {
     cursor: pointer;
     transform: scale(1.03);
     background: #0180bb;
 }
 
-button.ghost {
+.login__signup__button.ghost {
     background: transparent;
     border-color: #fff;
 }
 
-.form-container {
+.form__container {
     position: absolute;
     top: 0;
     height: 100%;
     transition: all .6s ease-in-out;
 }
 
-.sign-in-container {
+.signin__container {
     left: 0;
     width: 50%;
     z-index: 2;
 }
 
-.sign-up-container {
+.signup__container {
     left: 0;
     width: 50%;
     z-index: 1;
     opacity: 0;
 }
 
-.overlay-container {
+.login__signup__overlay__container {
     position: absolute;
     top: 0;
     left: 50%;
@@ -171,7 +170,7 @@ button.ghost {
     z-index: 100;
 }
 
-.overlay {
+.parent__overlay {
     background: #ff416c;
     background: linear-gradient(to right, #008ecf, #008ecf) no-repeat 0 0 / cover;
     color: #fff;
@@ -183,7 +182,7 @@ button.ghost {
     transition: transform .6s ease-in-out;
 }
 
-.overlay-panel {
+.overlay__panel {
     position: absolute;
     top: 0;
     display: flex;
@@ -198,43 +197,43 @@ button.ghost {
     transition: transform .6s ease-in-out;
 }
 
-.overlay-right {
+.overlay__right {
     right: 0;
     transform: translateY(0);
 }
 
-.overlay-left {
+.overlay__left {
     transform: translateY(-20%);
 }
 
 /* Move signin to right */
-.container.right-panel-active .sign-in-container {
+.login__container.right__panel__active .signin__container {
     transform: translateY(100%);
 }
 
 /* Move overlay to left */
-.container.right-panel-active .overlay-container {
+.login__container.right__panel__active .login__signup__overlay__container {
     transform: translateX(-100%);
 }
 
 /* Bring signup over signin */
-.container.right-panel-active .sign-up-container {
+.login__container.right__panel__active .signup__container {
     transform: translateX(100%);
     opacity: 1;
     z-index: 5;
 }
 
 /* Move overlay back to right */
-.container.right-panel-active .overlay {
+.login__container.right__panel__active .parent__overlay {
     transform: translateX(50%);
 }
 
 /* Bring back the text to center */
-.container.right-panel-active .overlay-left {
+.login__container.right__panel__active .overlay__left {
     transform: translateY(0);
 }
 
 /* Same effect for right */
-.container.right-panel-active .overlay-right {
+.login__container.right__panel__active .overlay__right {
     transform: translateY(20%);
 }
