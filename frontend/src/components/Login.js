@@ -4,6 +4,7 @@ import GoogleLoginButton from './GoogleLoginButton';
 import '../styles/Login.css'
 import axios from 'axios'
 import swal from 'sweetalert'
+const url = process.env.REACT_APP_SERVICE_URL
 
 function Login() {
 
@@ -27,14 +28,14 @@ function Login() {
         token: googleResponse.credential,
         client_id: googleResponse.client_id
       }
-      const response = await axios.post('http://localhost:8080/googlelogin', data);
+      const response = await axios.post(`${url}/googlelogin`, data);
       if (response.data.emailVerified === true) {
         const userData = {
           "username": response.data.username,
           "password": response.data.username
         }
         try {
-          const loginResponse = await axios.post('http://localhost:8080/login', userData);
+          const loginResponse = await axios.post(`${url}/login`, userData);
           if (loginResponse.data.error === false) {
             await swal("Login Successful", "You will be redirected to Login", "success");
             localStorage.setItem('name', loginResponse.data.name);
@@ -65,7 +66,7 @@ function Login() {
         token: googleResponse.credential,
         client_id: googleResponse.client_id
       }
-      const response = await axios.post('http://localhost:8080/googlelogin', data);
+      const response = await axios.post(`${url}/googlelogin`, data);
       if (response.data.emailVerified === true) {
         const userData = {
           "name": response.data.name,
@@ -74,7 +75,7 @@ function Login() {
           "userRole": userRole.trim()
         }
         try {
-          const signupResponse = await axios.post('http://localhost:8080/signup', userData);
+          const signupResponse = await axios.post(`${url}/signup`, userData);
           if (signupResponse.data.error === false) {
             await swal("Signup Successful", "You will be redirected to Login", "success");
             window.location.reload();
@@ -100,7 +101,7 @@ function Login() {
       "password": passwordLogin.trim()
     }
     try {
-      const response = await axios.post('http://localhost:8080/login', data);
+      const response = await axios.post(`${url}/login`, data);
       if (response.data.error === false) {
         await swal("Login Success", "Directing to dashboard..", "success");
         localStorage.setItem('token', response.data.token);
@@ -127,7 +128,7 @@ function Login() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/signup', data);
+      const response = await axios.post(`${url}/signup`, data);
       if (response.data.error === false) {
         await swal(response.data.message, "You will be redirected to Login", "success");
         navigate('/');
@@ -141,9 +142,9 @@ function Login() {
     setDisableButton(false);
   }
   return (
-    <div className='login__container'>
-      <div className={`container ${isRightPanelActive ? 'right-panel-active' : ''}`} id='container'>
-      <div className='form-container sign-up-container'>
+    <div className='login__signup__container'>
+      <div className={`login__container ${isRightPanelActive ? 'right__panel__active' : ''}`} id='container'>
+      <div className='form__container signup__container'>
         <form onSubmit={handleSignUp}>
 
 
@@ -153,14 +154,14 @@ function Login() {
           <div>
             <label htmlFor='role'>
               Please change if you are a provider
-              <select name='role' id='role' className='custom-dropdown' onChange={(e) => setUserRole(e.target.value)}>
+              <select name='role' id='role' className='custom__dropdown' onChange={(e) => setUserRole(e.target.value)}>
                 <option value="Client">Client</option>
                 <option value="Provider">Provider</option>
               </select>
             </label>
           </div>
 
-          <div className="social-container">
+          <div className="social__container">
             <GoogleLoginButton onSuccess={handleGoogleSignUpSuccess} onError={handleGoogleLogInError} />
           </div>
 
@@ -195,15 +196,15 @@ function Login() {
               required
             />
           </label>
-          <button style={{marginTop: "9px"}} disabled={disableButton}>Sign up</button>
+          <button className='login__signup__button' style={{marginTop: "9px"}} disabled={disableButton}>Sign up</button>
         </form>
       </div>
 
-      <div className='form-container sign-in-container'>
+      <div className='form__container signin__container'>
         <form onSubmit={handleLogIn}>
           <h1>Login</h1>
 
-          <div className="social-container">
+          <div className="social__container">
             <GoogleLoginButton onSuccess={handleGoogleLogInSuccess} onError={handleGoogleLogInError}/>
           </div>
 
@@ -229,25 +230,25 @@ function Login() {
             />
           </label>
 
-          <button>Log in</button>
+          <button className='login__signup__button' >Log in</button>
           <a href='/forgot'>Forgot your password ?</a>
 
 
         </form>
       </div>
 
-      <div className='overlay-container'>
-        <div className='overlay'>
-          <div className='overlay-panel overlay-left'>
+      <div className='login__signup__overlay__container'>
+        <div className='parent__overlay'>
+          <div className='overlay__panel overlay__left'>
             <h1>Login</h1>
             <p>Login here if you already have an account</p>
-            <button className='ghost mt-5' id='signIn' onClick={handlePanel}>Log In</button>
+            <button className='login__signup__button ghost mt-5' id='signIn' onClick={handlePanel}>Log In</button>
           </div>
 
-          <div className='overlay-panel overlay-right'>
+          <div className='overlay__panel overlay__right'>
             <h1>Create account</h1>
             <p>Signup here if you do not have an account</p>
-            <button className='ghost' id='signUp' onClick={handlePanel}>Sign Up</button>
+            <button className='login__signup__button ghost' id='signUp' onClick={handlePanel}>Sign Up</button>
           </div>
         </div>
       </div>
