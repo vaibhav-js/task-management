@@ -12,10 +12,12 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from 'axios';
 import swal from 'sweetalert'
 import dayjs from 'dayjs';
+import '../styles/TicketForm.css'
+const url = process.env.REACT_APP_SERVICE_URL
 
 
 function TicketForm() {
@@ -35,7 +37,7 @@ function TicketForm() {
 
   async function getServices() {
     try {
-      const response = await axios.get("http://localhost:8080/services");
+      const response = await axios.get(`${url}/services`);
       setServicesList(response.data.list);
     } catch (error) {
       console.error(error);
@@ -48,7 +50,7 @@ function TicketForm() {
       }
       try {
         setProviderArray([]);
-        const response = await axios.get('http://localhost:8080/providers', {params: data});
+        const response = await axios.get(`${url}/providers`, {params: data});
         setProviderArray(response.data);
         console.log(response.data);
         console.log(selectedDate);
@@ -77,7 +79,7 @@ function TicketForm() {
         "assigneename": provider,
         "reportername": localStorage.getItem('name'),
     }
-    const response = await axios.post('http://localhost:8080/ticket', data);
+    const response = await axios.post(`${url}/ticket`, data);
     if (response.data.error === false) {
         await swal('Created', response.data.message, "success");
     } else {
@@ -89,7 +91,7 @@ function TicketForm() {
     const data = {
         "token": localStorage.getItem('token')
     }
-    const response = await axios.delete('http://localhost:8080/tickets', {params: data})
+    const response = await axios.delete(`${url}/tickets`, {params: data})
     if (response.data.error === false) {
         await swal("Deleted", response.data.message, "success")
     } else {
@@ -155,7 +157,7 @@ function TicketForm() {
                         </Select>
                         <Box>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>                    
-                                <DateCalendar value={selectedDate} onChange={(newDate) => {setSelectedDate(newDate);console.log(selectedDate.$d);}} />
+                                <DatePicker disablePast value={selectedDate} onChange={(newDate) => {setSelectedDate(newDate);console.log(selectedDate.$d);}} />
                             </LocalizationProvider>
                         </Box>
                     </FormControl>
@@ -166,7 +168,7 @@ function TicketForm() {
                 <Button onClick={createTicket}>Ok</Button>
             </DialogActions>
         </Dialog>
-        <button onClick={deleteAllTickets}>Delete all tickets</button>
+        <button className='button__delete__tickets' onClick={deleteAllTickets}>Delete all tickets</button>
     </div>
   );
 }
