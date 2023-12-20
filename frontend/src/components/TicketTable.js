@@ -46,7 +46,7 @@ export default function DataGridDemo() {
             const data = {
                 "token": localStorage.getItem('token')
             }
-            const response = await axios.get(`${url}/tickets`, {params: data});
+            const response = await axios.get(`${url}/tickets/tickets`, {params: data});
             console.log(response)
             setRows(() => [...response.data.list]);
         } catch (error) {
