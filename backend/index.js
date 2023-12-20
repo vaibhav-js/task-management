@@ -1,5 +1,5 @@
 const express = require('express');
-const pool = require('./dbConfig')
+const pool = require('./config/dbConfig.js')
 const userRoutes = require('./routers/user.js');
 const ticketRoutes = require('./routers/ticket.js');
 

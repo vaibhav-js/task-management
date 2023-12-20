@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../dbConfig');
+const pool = require('../config/dbConfig');
 const { OAuth2Client } = require('google-auth-library');
 const auth = require('../middleware/auth')
 
