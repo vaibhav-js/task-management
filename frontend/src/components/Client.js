@@ -1,19 +1,18 @@
 import React from 'react';
 import TicketForm from './TicketForm';
-import TicketTable from './TicketTable';
 import swal from 'sweetalert';
 import axios from 'axios';
 import '../styles/Client.css'
+import Tickets from './Tickets';
 const url = process.env.REACT_APP_SERVICE_URL
 
 
 function Client() {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+
   async function handleLogout() {
     try {
-      const data = {
-        "token": localStorage.getItem('token')
-      }
-      const response = await axios.post(`${url}/logout`, data);
+      const response = await axios.post(`${url}/users/logout`);
       if (response.data.error === false) {
         localStorage.removeItem('token');
         localStorage.removeItem('name');
@@ -32,9 +31,9 @@ function Client() {
       <h1>Welcome to Dashboard</h1>
       <h2>Hi { localStorage.getItem('name') } </h2>
       <button className='button__logout' onClick={handleLogout}>Log Out</button>
-      <TicketTable />
-      <br></br>
       <TicketForm />
+      <Tickets />
+      <br></br>
       </div>
   );
 }
