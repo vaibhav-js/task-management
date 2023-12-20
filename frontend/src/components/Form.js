@@ -7,25 +7,32 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
+import swal from 'sweetalert';
 const url = process.env.REACT_APP_SERVICE_URL
 
 function Form() {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+
     const [open, setOpen] = React.useState(false);
     const [service, setService] = React.useState('');
 
     async function addService() {
-        const data = {
-            "token": localStorage.getItem('token'),
-            "service": service.toLowerCase()
-        }
-        console.log(service);
-        try {
-            const response = await axios.post(`${url}/service`, data);
+      setOpen(false);
+      const data = {
+          "service": service.toLowerCase()
+      }
+      console.log(service);
+      try {
+          const response = await axios.post(`${url}/users/service`, data);
+          if (response.data.error === false) {
             console.log(response);
-        } catch (error) {
-            console.error(error);
-        }
-        setOpen(false);
+            await swal('Successful', response.data.message, 'success')
+          } else {
+            await swal('Error', response.data.message, 'error');
+          }
+      } catch (error) {
+          console.error(error);
+      }
     }
   
     const handleClickOpen = () => {
