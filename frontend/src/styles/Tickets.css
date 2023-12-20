@@ -1,0 +1,21 @@
+.tickets__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    max-height: 500px;
+    background-color: rgb(99, 180, 187);
+    margin-top: 15px;
+}
+
+.tickets {
+    width: 290px;
+    margin-right: 20px;
+}
+
+.tickets h2 {
+    margin-left: 15px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(6, 47, 169);
+}

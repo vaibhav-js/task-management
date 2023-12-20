@@ -1,0 +1,8 @@
+.ticket__container {
+    margin: 15px;
+    border: 1px solid gray;
+}
+.ticket__container:hover {
+    transform: scale(1.02);
+    cursor: pointer;
+}

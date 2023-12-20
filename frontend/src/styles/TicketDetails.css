@@ -1,0 +1,17 @@
+.ticket__details__container {
+    background-color: lightgray;
+}
+
+.comments__container {
+    width: 100%;
+    margin-top: 10px;
+    background-color: bisque;
+}
+
+.ticket__details {
+    background-color: lightblue;
+}
+
+.add__comment {
+    background-color: lightgreen;
+}
