@@ -28,14 +28,14 @@ function Login() {
         token: googleResponse.credential,
         client_id: googleResponse.client_id
       }
-      const response = await axios.post(`${url}/googlelogin`, data);
+      const response = await axios.post(`${url}/users/googlelogin`, data);
       if (response.data.emailVerified === true) {
         const userData = {
           "username": response.data.username,
           "password": response.data.username
         }
         try {
-          const loginResponse = await axios.post(`${url}/login`, userData);
+          const loginResponse = await axios.post(`${url}/users/login`, userData);
           if (loginResponse.data.error === false) {
             await swal("Login Successful", "You will be redirected to Login", "success");
             localStorage.setItem('name', loginResponse.data.name);
@@ -66,7 +66,7 @@ function Login() {
         token: googleResponse.credential,
         client_id: googleResponse.client_id
       }
-      const response = await axios.post(`${url}/googlelogin`, data);
+      const response = await axios.post(`${url}/users/googlelogin`, data);
       if (response.data.emailVerified === true) {
         const userData = {
           "name": response.data.name,
@@ -75,7 +75,7 @@ function Login() {
           "userRole": userRole.trim()
         }
         try {
-          const signupResponse = await axios.post(`${url}/signup`, userData);
+          const signupResponse = await axios.post(`${url}/users/signup`, userData);
           if (signupResponse.data.error === false) {
             await swal("Signup Successful", "You will be redirected to Login", "success");
             window.location.reload();
@@ -97,11 +97,11 @@ function Login() {
     e.preventDefault();
     setDisableButton(false)
     const data = {
-      "username": usernameLogin.trim(),
+      "username": usernameLogin.trim().toLowerCase(),
       "password": passwordLogin.trim()
     }
     try {
-      const response = await axios.post(`${url}/login`, data);
+      const response = await axios.post(`${url}/users/login`, data);
       if (response.data.error === false) {
         await swal("Login Success", "Directing to dashboard..", "success");
         localStorage.setItem('token', response.data.token);
@@ -122,13 +122,13 @@ function Login() {
     setDisableButton(true);
     const data = {
       "name": nameSignup.trim(),
-      "username": usernameSignup.trim(),
+      "username": usernameSignup.trim().toLowerCase(),
       "password": passwordSignup.trim(),
       "userRole": userRole.trim()
     }
 
     try {
-      const response = await axios.post(`${url}/signup`, data);
+      const response = await axios.post(`${url}/users/signup`, data);
       if (response.data.error === false) {
         await swal(response.data.message, "You will be redirected to Login", "success");
         navigate('/');

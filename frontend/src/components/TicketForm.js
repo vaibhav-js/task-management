@@ -21,6 +21,8 @@ const url = process.env.REACT_APP_SERVICE_URL
 
 
 function TicketForm() {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+
   const [open, setOpen] = React.useState(false);
   const [service, setService] = React.useState('');
   const [servicesList, setServicesList] = React.useState([]);
@@ -37,7 +39,7 @@ function TicketForm() {
 
   async function getServices() {
     try {
-      const response = await axios.get(`${url}/services`);
+      const response = await axios.get(`${url}/users/services`);
       setServicesList(response.data.list);
     } catch (error) {
       console.error(error);
@@ -50,7 +52,7 @@ function TicketForm() {
       }
       try {
         setProviderArray([]);
-        const response = await axios.get(`${url}/providers`, {params: data});
+        const response = await axios.get(`${url}/users/providers`, {params: data});
         setProviderArray(response.data);
         console.log(response.data);
         console.log(selectedDate);
@@ -74,12 +76,11 @@ function TicketForm() {
     console.log(service, provider);
     const data = {
         "service": service,
-        "token": localStorage.getItem('token'),
         "assigneeid": providerId,
         "assigneename": provider,
         "reportername": localStorage.getItem('name'),
     }
-    const response = await axios.post(`${url}/ticket`, data);
+    const response = await axios.post(`${url}/tickets/ticket`, data);
     if (response.data.error === false) {
         await swal('Created', response.data.message, "success");
     } else {
@@ -88,10 +89,7 @@ function TicketForm() {
   };
 
   const deleteAllTickets = async () => {
-    const data = {
-        "token": localStorage.getItem('token')
-    }
-    const response = await axios.delete(`${url}/tickets`, {params: data})
+    const response = await axios.delete(`${url}/tickets/tickets`)
     if (response.data.error === false) {
         await swal("Deleted", response.data.message, "success")
     } else {
