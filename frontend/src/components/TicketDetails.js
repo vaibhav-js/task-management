@@ -27,6 +27,31 @@ function TicketDetails() {
         horizontal: 'center',
     });
 
+    const getTicketDetails = React.useCallback(async () => {
+        try {
+            const response = await axios.get(`${url}/tickets/ticket/${ticketParams.id}`);
+            if (response.data.error === false) {
+                setTicketAssignee(response.data.details.assigneename)
+                setTicketReporter(response.data.details.reportername)
+                setTicketDescription(response.data.details.description)
+            } else {
+
+            }
+        } catch (error) {
+            console.error(error);   
+        }
+    }, [ticketParams.id]);
+
+    const getComments = React.useCallback(async () => {
+        try {
+            const response = await axios.get(`${url}/tickets/ticket/${ticketParams.id}/comments`);
+            if (response.data.error === false) {
+                setCommentsList(response.data.commentsList)
+            } 
+        } catch (error) {
+            console.error(error);
+        }
+    }, [ticketParams.id]);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -60,32 +85,6 @@ function TicketDetails() {
             } catch (error) {
                 console.error(error);
             }
-        }
-    }
-
-    async function getTicketDetails() {
-        try {
-            const response = await axios.get(`${url}/tickets/ticket/${ticketParams.id}`);
-            if (response.data.error === false) {
-                setTicketAssignee(response.data.details.assigneename)
-                setTicketReporter(response.data.details.reportername)
-                setTicketDescription(response.data.details.description)
-            } else {
-
-            }
-        } catch (error) {
-            console.error(error);   
-        }
-    }
-
-    async function getComments() {
-        try {
-            const response = await axios.get(`${url}/tickets/ticket/${ticketParams.id}/comments`);
-            if (response.data.error === false) {
-                setCommentsList(response.data.commentsList)
-            } 
-        } catch (error) {
-            console.error(error);
         }
     }
 
