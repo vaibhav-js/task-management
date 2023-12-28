@@ -99,7 +99,7 @@ function TicketForm() {
 
   return (
     <div>
-        <Button onClick={handleClickOpen}>Create ticket</Button>
+        <Button onClick={handleClickOpen} variant='contained'>Create ticket</Button>
         <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
             <DialogTitle>Fill the form</DialogTitle>
             <DialogContent>
@@ -166,7 +166,7 @@ function TicketForm() {
                 <Button onClick={createTicket}>Ok</Button>
             </DialogActions>
         </Dialog>
-        <button className='button__delete__tickets' onClick={deleteAllTickets}>Delete all tickets</button>
+        <Button variant='contained' sx={{marginLeft: 2}} onClick={deleteAllTickets}>Delete all tickets</Button>
     </div>
   );
 }

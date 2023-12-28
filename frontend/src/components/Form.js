@@ -45,7 +45,7 @@ function Form() {
   
     return (
       <React.Fragment>
-        <Button variant="outlined" onClick={handleClickOpen}>
+        <Button variant="contained" onClick={handleClickOpen}>
           Add new service
         </Button>
         <Dialog open={open} onClose={handleClose}>

@@ -1,11 +1,12 @@
 import React from 'react'
 import { useParams } from 'react-router-dom';
-import { Box, Button, Snackbar, TextField } from '@mui/material';
+import { Box, Button, Snackbar, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import '../styles/TicketDetails.css'
 import swal from 'sweetalert';
 import Comment from './Comment';
 import MuiAlert from '@mui/material/Alert';
+import Navbar from './Navbar';
 const url = process.env.REACT_APP_SERVICE_URL;
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -77,29 +78,34 @@ function TicketDetails() {
                 const response = await axios.post(`${url}/tickets/ticket/comment`, data);
                 if (response.data.error === false) {
                     await swal('Success', response.data.message, 'success');
-                    setCommentMessage('');
                 } else {
                     await swal('Error', response.data.message, 'error');
-                    setCommentMessage('');
                 }
             } catch (error) {
                 console.error(error);
             }
         }
+        setCommentMessage('');
     }
 
     return (
         <div className='ticket__details__container'>
+            <Navbar />
             <div className='ticket__details'>
                 <center>
-                    <Box sx={{ width: 400}}>
-                        <h1>Ticket Details</h1>
-                        <br />
-                        <h2>Vendor: {ticketAssignee ? ticketAssignee : 'loading..'}</h2>
-                        <br/>
-                        <h2>Client: {ticketReporter ? ticketReporter : 'loading..'}</h2>
-                        <br />
-                        <h2>Description: {ticketDescription ? ticketDescription : 'loading..'}</h2>
+                    <Box sx={{ width: 400, backgroundColor: '#f0f0f0', padding: 3, borderRadius: 4, boxShadow: 2 }}>
+                        <Typography variant="h4" sx={{ marginBottom: 2 }}>
+                            Ticket Details
+                        </Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Vendor: {ticketAssignee ? ticketAssignee : 'loading..'}
+                        </Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Client: {ticketReporter ? ticketReporter : 'loading..'}
+                        </Typography>
+                        <Typography variant="h6">
+                            Description: {ticketDescription ? ticketDescription : 'loading..'}
+                        </Typography>
                     </Box>
                 </center>
             </div>
@@ -111,23 +117,28 @@ function TicketDetails() {
                     maxRows={4}
                     value={commentMessage}
                     onChange={(e) => setCommentMessage(e.target.value)}
-                    sx={{marginLeft: 2}}
+                    variant="outlined"
+                    sx={{ margin: 2, width: '30%' }}
                 />
-                <Button onClick={addComment} sx={{margin: 1}}>Send</Button>
+                <Button onClick={addComment} sx={{margin: 1}} variant="contained" color="primary">Send</Button>
             </div>
             <div className='comments__container'>
-                <h3>COMMENTS</h3>
+                <Typography variant="h5" sx={{ marginBottom: 2 }}>
+                    COMMENTS
+                </Typography>
                 {
                     (Array.isArray(commentsList) && commentsList.length > 0) ? (
                         commentsList.map(comment => (
                             <Comment id={comment.id} key={comment.id} time={comment.time} commenter={comment.commentername} message={comment.message} />
                         ))
-                    ) : (<>No comments</>)
+                    ) : (<Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+                            No comments
+                        </Typography>)
                 }
             </div>
-            <Snackbar open={snackbarState.open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
-                    Wrong information
+            <Snackbar open={snackbarState.open} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                    Cannot read empty
                 </Alert>
             </Snackbar>
         </div>
