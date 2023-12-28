@@ -95,7 +95,7 @@ function Login() {
 
   async function handleLogIn(e) {
     e.preventDefault();
-    setDisableButton(false)
+    setDisableButton(true)
     const data = {
       "username": usernameLogin.trim().toLowerCase(),
       "password": passwordLogin.trim()
@@ -115,6 +115,7 @@ function Login() {
     } catch (error) {
       console.error(error);
     }
+    setDisableButton(false)
   }
 
   async function handleSignUp(e) {
@@ -230,7 +231,7 @@ function Login() {
             />
           </label>
 
-          <button className='login__signup__button' >Log in</button>
+          <button className='login__signup__button' disabled={disableButton}>Log in</button>
           <a href='/forgot'>Forgot your password ?</a>
 
 

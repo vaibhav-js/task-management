@@ -10,9 +10,11 @@ function Navbar() {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 
     const navigate = useNavigate();
+    const [logoutButtonDisable, setLogoutButtonDisable] = React.useState(false);
 
     async function handleLogout() {
         try {
+          setLogoutButtonDisable(true);
           const response = await axios.post(`${url}/users/logout`);
           if (response.data.error === false) {
             localStorage.removeItem('token');
@@ -25,6 +27,7 @@ function Navbar() {
         } catch (error) {
           console.error(error);
         }
+        setLogoutButtonDisable(false);
     }
 
     function navigateToDashboard() {
@@ -48,7 +51,7 @@ function Navbar() {
                     Hi { localStorage.getItem('name') }
                 </Typography>
                 <Button color="inherit" onClick={navigateToDashboard}>Dashboard</Button>
-                <Button color="inherit" onClick={handleLogout}>Logout</Button>
+                <Button color="inherit" onClick={handleLogout} disabled={logoutButtonDisable} >Logout</Button>
             </Toolbar>
         </AppBar>
     </Box>

@@ -139,6 +139,12 @@ a {
     border-color: #fff;
 }
 
+.login__signup__button:disabled {
+    background: #ccc;
+    border: none;
+    cursor: not-allowed;;
+}
+
 .form__container {
     position: absolute;
     top: 0;
