@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import GoogleLoginButton from './GoogleLoginButton';
+import { Box, LinearProgress } from '@mui/material';
 import '../styles/Login.css'
 import axios from 'axios'
 import swal from 'sweetalert'
@@ -103,7 +104,12 @@ function Login() {
     try {
       const response = await axios.post(`${url}/users/login`, data);
       if (response.data.error === false) {
-        await swal("Login Success", "Directing to dashboard..", "success");
+        await swal({
+          title: "Login Success",
+          text: "Directing to dashboard..",
+          icon: "success",
+          timer: 2000
+        })
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('name', response.data.name);
         localStorage.setItem('role', response.data.role);
@@ -143,119 +149,124 @@ function Login() {
     setDisableButton(false);
   }
   return (
-    <div className='login__signup__container'>
-      <div className={`login__container ${isRightPanelActive ? 'right__panel__active' : ''}`} id='container'>
-      <div className='form__container signup__container'>
-        <form onSubmit={handleSignUp}>
+    <>
+      {disableButton ?  <Box sx={{ width: '100%' }}>
+                          <LinearProgress />
+                        </Box> : <></>}
+      
+      <div className='login__signup__container'>
+        <div className={`login__container ${isRightPanelActive ? 'right__panel__active' : ''}`} id='container'>
+          <div className='form__container signup__container'>
+            <form onSubmit={handleSignUp}>
 
 
-          <h1>Create Account</h1>
-          <br />
+              <h1>Create Account</h1>
+              <br />
 
-          <div>
-            <label htmlFor='role'>
-              Please change if you are a provider
-              <select name='role' id='role' className='custom__dropdown' onChange={(e) => setUserRole(e.target.value)}>
-                <option value="Client">Client</option>
-                <option value="Provider">Provider</option>
-              </select>
-            </label>
+              <div>
+                <label htmlFor='role'>
+                  Please change if you are a provider
+                  <select name='role' id='role' className='custom__dropdown' onChange={(e) => setUserRole(e.target.value)}>
+                    <option value="Client">Client</option>
+                    <option value="Provider">Provider</option>
+                  </select>
+                </label>
+              </div>
+
+              <div className="social__container">
+                <GoogleLoginButton onSuccess={handleGoogleSignUpSuccess} onError={handleGoogleLogInError} />
+              </div>
+
+              <span>Or use your Email for registration</span>
+
+              <label>
+                <input
+                  type='text'
+                  placeholder='Name'
+                  value={nameSignup}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </label>
+
+              <label>
+                <input
+                  type='username'
+                  placeholder='Username'
+                  value={usernameSignup}
+                  onChange={(e) => setUsernameSignup(e.target.value)}
+                  required
+                />
+              </label>
+
+              <label>
+                <input
+                  type='password'
+                  placeholder='Password'
+                  value={passwordSignup}
+                  onChange={(e) => setpasswordSignup(e.target.value)}
+                  required
+                />
+              </label>
+              <button className='login__signup__button' style={{marginTop: "9px"}} disabled={disableButton}>Sign up</button>
+            </form>
           </div>
 
-          <div className="social__container">
-            <GoogleLoginButton onSuccess={handleGoogleSignUpSuccess} onError={handleGoogleLogInError} />
+          <div className='form__container signin__container'>
+            <form onSubmit={handleLogIn}>
+              <h1>Login</h1>
+
+              <div className="social__container">
+                <GoogleLoginButton onSuccess={handleGoogleLogInSuccess} onError={handleGoogleLogInError}/>
+              </div>
+
+              <span>Or sign in using your username</span>
+
+              <label>
+                <input
+                  type='username'
+                  placeholder='Username'
+                  value={usernameLogin}
+                  onChange={(e) => setUsernameLogin(e.target.value)}
+                  required
+                />
+              </label>
+
+              <label>
+                <input
+                  type='password'
+                  placeholder='Password'
+                  value={passwordLogin}
+                  onChange={(e) => setpasswordLogin(e.target.value)}
+                  required
+                />
+              </label>
+
+              <button className='login__signup__button' disabled={disableButton}>Log in</button>
+              <a href='/forgot'>Forgot your password ?</a>
+
+
+            </form>
           </div>
 
-          <span>Or use your Email for registration</span>
+          <div className='login__signup__overlay__container'>
+            <div className='parent__overlay'>
+              <div className='overlay__panel overlay__left'>
+                <h1>Login</h1>
+                <p>Login here if you already have an account</p>
+                <button className='login__signup__button ghost mt-5' id='signIn' onClick={handlePanel}>Log In</button>
+              </div>
 
-          <label>
-            <input
-              type='text'
-              placeholder='Name'
-              value={nameSignup}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </label>
-
-          <label>
-            <input
-              type='username'
-              placeholder='Username'
-              value={usernameSignup}
-              onChange={(e) => setUsernameSignup(e.target.value)}
-              required
-            />
-          </label>
-
-          <label>
-            <input
-              type='password'
-              placeholder='Password'
-              value={passwordSignup}
-              onChange={(e) => setpasswordSignup(e.target.value)}
-              required
-            />
-          </label>
-          <button className='login__signup__button' style={{marginTop: "9px"}} disabled={disableButton}>Sign up</button>
-        </form>
-      </div>
-
-      <div className='form__container signin__container'>
-        <form onSubmit={handleLogIn}>
-          <h1>Login</h1>
-
-          <div className="social__container">
-            <GoogleLoginButton onSuccess={handleGoogleLogInSuccess} onError={handleGoogleLogInError}/>
-          </div>
-
-          <span>Or sign in using your username</span>
-
-          <label>
-            <input
-              type='username'
-              placeholder='Username'
-              value={usernameLogin}
-              onChange={(e) => setUsernameLogin(e.target.value)}
-              required
-            />
-          </label>
-
-          <label>
-            <input
-              type='password'
-              placeholder='Password'
-              value={passwordLogin}
-              onChange={(e) => setpasswordLogin(e.target.value)}
-              required
-            />
-          </label>
-
-          <button className='login__signup__button' disabled={disableButton}>Log in</button>
-          <a href='/forgot'>Forgot your password ?</a>
-
-
-        </form>
-      </div>
-
-      <div className='login__signup__overlay__container'>
-        <div className='parent__overlay'>
-          <div className='overlay__panel overlay__left'>
-            <h1>Login</h1>
-            <p>Login here if you already have an account</p>
-            <button className='login__signup__button ghost mt-5' id='signIn' onClick={handlePanel}>Log In</button>
-          </div>
-
-          <div className='overlay__panel overlay__right'>
-            <h1>Create account</h1>
-            <p>Signup here if you do not have an account</p>
-            <button className='login__signup__button ghost' id='signUp' onClick={handlePanel}>Sign Up</button>
+              <div className='overlay__panel overlay__right'>
+                <h1>Create account</h1>
+                <p>Signup here if you do not have an account</p>
+                <button className='login__signup__button ghost' id='signUp' onClick={handlePanel}>Sign Up</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-    </div>
-    </div>
+    </>
   )
 }
 
