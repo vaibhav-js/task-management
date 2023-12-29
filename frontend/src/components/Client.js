@@ -8,11 +8,10 @@ function Client() {
 
   return (
     <div className='client'>
-      <h1>Welcome to Dashboard</h1>
       <TicketForm />
       <Tickets />
       <br></br>
-      </div>
+    </div>
   );
 }
 

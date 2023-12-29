@@ -1,21 +1,8 @@
 .provider {
     width: 100%;
-    background-color: lightgray;
     display: flex;
     flex-direction: column;
-}
 
-.button__logout {
-    width: 10%;
-    margin: 10px;
-}
-
-.table {
-    margin-top: 40px;
-}
-
-.table h3 {
-    margin-bottom: 10px;
 }
 
 .form {

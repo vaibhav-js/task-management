@@ -7,7 +7,6 @@ function Provider() {
 
   return (
     <div className='provider'>
-        <h1>Welcome to Dashboard</h1>
         <div className='form'>
           <Form />
         </div>
