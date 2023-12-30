@@ -3,6 +3,7 @@ const pool = require('./config/dbConfig.js')
 const userRoutes = require('./routers/user.js');
 const ticketRoutes = require('./routers/ticket.js');
 const path = require('path')
+const { Pool } = require('pg');
 const fs = require('fs')
 
 const app = express();
