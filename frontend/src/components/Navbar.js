@@ -20,14 +20,15 @@ function Navbar() {
             localStorage.removeItem('token');
             localStorage.removeItem('name');
             localStorage.removeItem('role');
-            window.location.reload();
+            navigate('/');
           } else {
             await swal("Error", response.data.message, "error");
           }
         } catch (error) {
           console.error(error);
+        } finally {
+          setLogoutButtonDisable(false);
         }
-        setLogoutButtonDisable(false);
     }
 
     function navigateToDashboard() {
