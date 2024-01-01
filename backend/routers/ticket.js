@@ -6,10 +6,10 @@ const auth = require('../middleware/auth.js')
 
 router.post('/ticket', auth, async (request, response) => {
     try {
-        const {service, assigneeid, assigneename, reportername} = request.body;
+        const {service, assigneeid, assigneename, reportername, date} = request.body;
         const reporterid = request.user.id;
-        const date = (new Date()).toISOString();
-        const ticketResult = await pool.query('insert into tickets(reporterid, reportername, assigneeid, assigneename, description, createdat) values($1, $2, $3, $4, $5, $6)', [reporterid, reportername, assigneeid, assigneename, service, date]);
+        const createdAtDate = (new Date()).toISOString();
+        const ticketResult = await pool.query('insert into tickets(reporterid, reportername, assigneeid, assigneename, description, createdat, appointmentdate) values($1, $2, $3, $4, $5, $6, $7)', [reporterid, reportername, assigneeid, assigneename, service, createdAtDate, date]);
             if (ticketResult.rowCount) {
                 response.send({message: "Ticket details submitted", error: false});
             }

@@ -79,6 +79,7 @@ function TicketForm() {
         "assigneeid": providerId,
         "assigneename": provider,
         "reportername": localStorage.getItem('name'),
+        "date": selectedDate
     }
     const response = await axios.post(`${url}/tickets/ticket`, data);
     if (response.data.error === false) {
